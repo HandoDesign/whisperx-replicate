@@ -11,6 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Debug token presence
+        run: |
+            if [ -z "${REPLICATE_API_TOKEN}" ]; then
+              echo "REPLICATE_API_TOKEN is empty"
+              exit 1
+            fi
+            echo "REPLICATE_API_TOKEN is set (length: ${#REPLICATE_API_TOKEN})"
+          env:
+            REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+
       - name: Install Cog
         run: |
           sudo curl -o /usr/local/bin/cog -L https://github.com/replicate/cog/releases/latest/download/cog_`uname -s`_`uname -m`
