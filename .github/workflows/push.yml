@@ -44,4 +44,14 @@ jobs:
       - name: Push to Replicate
         env:
           REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
-        run: cog push r8.im/handodesign/whisperx-a40-large
+        # run: cog push r8.im/handodesign/whisperx-a40-large
+        run: |
+          set -e
+          for i in 1 2 3 4 5; do
+            echo "Attempt $i..."
+            if cog push r8.im/handodesign/whisperx-a40-large; then
+              exit 0
+            fi
+            sleep $((i*30))
+          done
+          exit 1
