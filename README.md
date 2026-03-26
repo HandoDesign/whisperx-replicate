@@ -1,3 +1,9 @@
+# H: Ammendments
+
+- more auth_models for word-time-stamps (notably yue)
+
+---
+
 # whisperX on Replicate
 
 This repo is the codebase behind the following Replicate models, which we use at [Upmeet](https://upmeet.ai):
