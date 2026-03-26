@@ -12,6 +12,13 @@ import time
 import torch
 import ffmpeg
 
+# Add Cantonese (yue) alignment support - 20260326
+## GPT5.2: alignment may not be exposed - if error: try: `from whisperx import alignment` and more refined 'append' (see https://platform.openai.com/logs/resp_08e7dbdd4d58db690069c4d97b5d348198a7ec7b2d2d43c22c )
+whisperx.alignment.DEFAULT_ALIGN_MODELS_HF["yue"] = "scottykwok/wav2vec2-large-xlsr-cantonese"
+if "yue" not in whisperx.alignment.LANGUAGES_WITHOUT_SPACES:
+    whisperx.alignment.LANGUAGES_WITHOUT_SPACES.append("yue")
+# .
+
 compute_type = "float16"  # change to "int8" if low on GPU mem (may reduce accuracy)
 device = "cuda"
 whisper_arch = "./models/faster-whisper-large-v3"
