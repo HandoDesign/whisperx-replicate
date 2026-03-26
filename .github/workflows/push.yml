@@ -21,6 +21,13 @@ jobs:
           fi
           echo "REPLICATE_API_TOKEN is set (length: ${#REPLICATE_API_TOKEN})"
 
+      - name: Who am I on Replicate?
+        env:
+          REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
+        run: |
+          curl -fsSL https://api.replicate.com/v1/account \
+            -H "Authorization: Token ${REPLICATE_API_TOKEN}"
+
       - name: Install Cog
         run: |
           sudo curl -o /usr/local/bin/cog -L https://github.com/replicate/cog/releases/latest/download/cog_`uname -s`_`uname -m`
