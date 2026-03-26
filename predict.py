@@ -13,10 +13,24 @@ import torch
 import ffmpeg
 
 # Add Cantonese (yue) alignment support - 20260326
+# A. (Error: AttributeError: module 'whisperx' has no attribute 'alignment')
 ## GPT5.2: alignment may not be exposed - if error: try: `from whisperx import alignment` and more refined 'append' (see https://platform.openai.com/logs/resp_08e7dbdd4d58db690069c4d97b5d348198a7ec7b2d2d43c22c )
-whisperx.alignment.DEFAULT_ALIGN_MODELS_HF["yue"] = "scottykwok/wav2vec2-large-xlsr-cantonese"
-if "yue" not in whisperx.alignment.LANGUAGES_WITHOUT_SPACES:
-    whisperx.alignment.LANGUAGES_WITHOUT_SPACES.append("yue")
+# whisperx.alignment.DEFAULT_ALIGN_MODELS_HF["yue"] = "scottykwok/wav2vec2-large-xlsr-cantonese"
+# if "yue" not in whisperx.alignment.LANGUAGES_WITHOUT_SPACES:
+#     whisperx.alignment.LANGUAGES_WITHOUT_SPACES.append("yue")
+# B.
+from whisperx import alignment
+# Add Cantonese (yue) alignment support
+alignment.DEFAULT_ALIGN_MODELS_HF["yue"] = "scottykwok/wav2vec2-large-xlsr-cantonese"
+# - Ensure yue is treated as no-spaces language (depending on container type)
+try:
+    if "yue" not in alignment.LANGUAGES_WITHOUT_SPACES:
+        alignment.LANGUAGES_WITHOUT_SPACES.append("yue")  # works if it's a list
+except AttributeError:
+    # If it's a set/tuple/etc.
+    alignment.LANGUAGES_WITHOUT_SPACES = list(alignment.LANGUAGES_WITHOUT_SPACES)
+    if "yue" not in alignment.LANGUAGES_WITHOUT_SPACES:
+        alignment.LANGUAGES_WITHOUT_SPACES.append("yue")
 # .
 
 compute_type = "float16"  # change to "int8" if low on GPU mem (may reduce accuracy)
